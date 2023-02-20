@@ -11,3 +11,9 @@ bin           = @["chords"]
 # Dependencies
 
 requires "nim >= 1.6.10"
+
+task run, "Compiles the entrypoint and runs it":
+  exec "nim c -r $bin"
+
+task test, "Runs the test suite":
+  exec "nim c -r tests/tester"
