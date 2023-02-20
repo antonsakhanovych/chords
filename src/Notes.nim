@@ -7,33 +7,34 @@ type
     pitch: Pitch
 
   Step* = enum
-    Half = 1, Whole = 2, WholeHalf = 3
+    H = 1, W = 2, WH = 3
 
   Pitch* = enum
-    TripleFlat = -3, DoubleFlat = -2, Flat = -1, Usual = 0, Sharp = 1, DoubleSharp = 2, TripleSharp = 3
-
-proc normalizePitch(num: int): int =
-  if num >= 9 and num <= 15:
-    result = num - 12
-  elif num <= -9 and num >= -15:
-    result = num + 12
-  else:
-    result = num
-
-proc getMagnitude(self: Note): int =
-  result = ord(self.note) + ord(self.pitch)
+    DoubleFlat = -2, Flat = -1, Usual = 0, Sharp = 1, DoubleSharp = 2
 
 proc constrNote*(note: NaturalNote, pitch: Pitch): Note =
   result = Note(note: note, pitch: pitch)
 
+proc getNote*(self: Note): NaturalNote =
+  result = self.note
+
+proc getPitch*(self: Note): Pitch =
+  result = self.pitch
+
 proc toString*(self: Note): string =
   result = $self.note & (if ord(self.pitch) > 0: repeat("#", ord(self.pitch)) else: repeat("b", abs(ord(self.pitch))))
 
-proc shiftNote*(note: Note, step: Step): Note =
+proc normalizePitch(num: int): int =
+  result = if num < -3: num + 12 elif num > 3: num - 12 else: num
+
+proc getMagnitude*(self: Note): int =
+  result = ord(self.note) + ord(self.pitch)
+
+proc shiftNote*(self: Note, step: Step): Note =
   new result
-  result.note = note.note.nextNote
+  result.note = self.note.nextNote
   let 
-    targetMagnitude = note.getMagnitude + ord(step)
+    targetMagnitude = self.getMagnitude + ord(step)
     pitch = targetMagnitude - ord(result.note)
   result.pitch = Pitch normalizePitch pitch
 

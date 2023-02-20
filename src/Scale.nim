@@ -5,12 +5,13 @@ type
   Scale* = ref object of RootObj
     tonic: Note
     notes: seq[Note]
+    
   Pattern* = seq[Step]
 
-let
-  majorScale*: Pattern = @[Whole, Whole, Half, Whole, Whole, Whole, Half]
-  minorScale*: Pattern = @[Whole, Half, Whole, Whole, Half, Whole, Whole]
-  harmonicMinorScale*: Pattern = @[Whole, Half, Whole, Whole, Half, WholeHalf, Half]
+const
+  majorScale*: Pattern = @[W, W, H, W, W, W, H]
+  minorScale*: Pattern = @[W, H, W, W, H, W, W]
+  harmonicMinorScale*: Pattern = @[W, H, W, W, H, WH, H]
 
 proc constrScale*(note: Note, pattern: Pattern): Scale =
   var
@@ -26,3 +27,7 @@ proc constrScale*(note: Note, pattern: Pattern): Scale =
 proc toString*(self: Scale): string =
   for note in self.notes:
     result = result & note.toString & " "
+
+proc getNotes*(self: Scale): seq[Note] =
+  return self.notes
+
